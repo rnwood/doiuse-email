@@ -80,22 +80,22 @@ export class DoIUseEmail {
         const supportMap = getProperty(stats, emailClient);
 
         if (supportMap === void 0) {
-          throw new Error(`Feature \`${featureTitle}\` not found on \`${emailClient}\`.`);
-        }
+          this.warning(`\`${featureTitle}\` support is not known for \`${emailClient}\``);
+        } else {
+          const supportStatus = getEmailClientSupportStatus(supportMap);
+          if (supportStatus.type === 'none') {
+            this.error(`\`${featureTitle}\` is not supported by \`${emailClient}\``);
+          } else if (supportStatus.type === 'partial') {
+            this.warning(`\`${featureTitle}\` is only partially supported by \`${emailClient}\``);
+          }
 
-        const supportStatus = getEmailClientSupportStatus(supportMap);
-        if (supportStatus.type === 'none') {
-          this.error(`\`${featureTitle}\` is not supported by \`${emailClient}\``);
-        } else if (supportStatus.type === 'partial') {
-          this.warning(`\`${featureTitle}\` is only partially supported by \`${emailClient}\``);
-        }
-
-        for (const noteNumber of supportStatus.noteNumbers ?? []) {
-          this.note(
-            `Note about \`${featureTitle}\` support for \`${emailClient}\`: ${
-              feature.notes_by_num![String(noteNumber)]
-            }`
-          );
+          for (const noteNumber of supportStatus.noteNumbers ?? []) {
+            this.note(
+              `Note about \`${featureTitle}\` support for \`${emailClient}\`: ${
+                feature.notes_by_num![String(noteNumber)]
+              }`
+            );
+          }
         }
       }
     }

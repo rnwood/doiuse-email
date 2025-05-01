@@ -72,6 +72,27 @@ describe('doIUseEmail() works', () => {
     expect(result).toMatchSnapshot();
   });
 
+  test('should warn on unknown support of inline-style features or a browser', () => {
+    // `table-layout` support is not known for `thunderbird.macos`
+    const code = outdent`
+			<!doctype html>
+			<html>
+				<body>
+					<div style='table-layout: auto'></div>
+				</body>
+			</html>
+		`;
+    const result = doIUseEmail(code, {
+      emailClients: ['thunderbird.macos']
+    });
+    expect(result.success).toEqual(true);
+    expect(result.warnings.length).toEqual(1);
+    expect(result.warnings[0]).toEqual(
+      '`table-layout` support is not known for `thunderbird.macos`'
+    );
+    expect(result).toMatchSnapshot();
+  });
+
   test('should work with selectors', () => {
     // Desktop webmail supports most selectors
     const code = outdent`
