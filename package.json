@@ -67,6 +67,7 @@
   ],
   "dependencies": {
     "@adobe/css-tools": "^4.3.1",
+    "caniemail-fetcher": "^1.0.7",
     "css-what": "^6.1.0",
     "domhandler": "^5.0.3",
     "dot-prop": "^8.0.2",
